@@ -1,0 +1,6 @@
+.block {
+  border: 1px solid black;
+  font-size: 2em;
+  text-align: center;
+  padding: 25px 30px;
+}

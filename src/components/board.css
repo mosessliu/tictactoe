@@ -1,0 +1,14 @@
+.board {
+  margin: auto;
+  max-width: 300px;
+}
+
+ul {
+  margin: 0;
+}
+
+
+li {
+  list-style: none;
+  display: inline-block;
+}

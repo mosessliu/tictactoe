@@ -1,0 +1,9 @@
+body {
+  padding: 50px;
+  background-color: #60eab2;
+}
+
+#container {
+  display: flex;
+  justify-content: flex;
+}
