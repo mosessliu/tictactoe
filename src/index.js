@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Board from './components/board'
+import Game from './components/game'
 import './index.css';
 
 const destination = document.querySelector('#container');
-ReactDOM.render(<Board />, destination);
+ReactDOM.render(<Game />, destination);

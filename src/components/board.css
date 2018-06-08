@@ -1,10 +1,6 @@
-.board {
-  margin: auto;
-  max-width: 300px;
-}
-
 ul {
-  margin: 0;
+  margin: -5px;
+  padding: 0;
 }
 
 
