@@ -1,6 +1,7 @@
 import React from 'react';
-import Board from './board'
-import './game.css'
+import Board from './board';
+import History from './history';
+import './game.css';
 
 export default class Game extends React.Component {
   constructor(props) {
@@ -8,12 +9,15 @@ export default class Game extends React.Component {
     this.state = { 
       isPlayerOnesTurn: true, 
       gameIsActive: true,
-      isCatsGame: false
+      isCatsGame: false,
+      history: []
     }; 
     this.switchTurn = this.switchTurn.bind(this);
     this.endGame = this.endGame.bind(this);
     this.resetGame = this.resetGame.bind(this);
     this.catsGame = this.catsGame.bind(this);
+    this.addToHistory = this.addToHistory.bind(this);
+    this.revertToMove = this.revertToMove.bind(this);
   }
 
   switchTurn() {
@@ -22,13 +26,37 @@ export default class Game extends React.Component {
     });
   }
 
+  addToHistory(block) {
+    this.setState(prevState => {
+      const history = prevState.history;
+      history.push(block);
+      return { history: history };
+    })
+  }
+
+  revertToMove(moveNumber) {
+    var history = this.state.history;
+    var blockStates = this._board.state.blockStates;
+
+    while (history.length > moveNumber) {
+      const poppedBlock = history.pop();
+      blockStates[poppedBlock] = null;
+    }
+    this.setState({ history: history, isPlayerOnesTurn: (moveNumber % 2 == 0) });
+    this._board.setState({ blockStates: blockStates});
+  }
+
   endGame() {
     this.setState({ gameIsActive: false });
   }
 
   resetGame() {
     this._board.resetBoard();
-    this.setState({ gameIsActive: true, isCatsGame: false});
+    this.setState({ 
+      isPlayerOnesTurn: true,
+      gameIsActive: true, 
+      isCatsGame: false, 
+      history: []});
   }
 
   catsGame() {
@@ -47,6 +75,7 @@ export default class Game extends React.Component {
     }
   }
 
+
   render() {
     const self = this;
     return (
@@ -54,7 +83,7 @@ export default class Game extends React.Component {
         <div className="title">
           Tic Tac Toe!
         </div>
-        <div className="description">
+        <div className="message">
           {this.generateMessage()}
         </div>
         <Board 
@@ -63,8 +92,13 @@ export default class Game extends React.Component {
           switchTurn = {this.switchTurn}
           endGame = {this.endGame}
           catsGame = {this.catsGame}
+          addToHistory = {this.addToHistory}
         />
         <button onClick={this.resetGame}>Reset Game</button>
+        <History 
+          history={this.state.history}
+          revertToMove={this.revertToMove}
+        />
       </div>
     );
   }

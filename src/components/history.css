@@ -1,0 +1,24 @@
+.historyItem {
+  display: list-item;
+  font-size: 1.5em;
+  background-color: rgba(38,181,105, 0.5);
+  font-family: monospace;
+  height: 40px;
+  margin: 5px;
+  width: 225px;
+  border-radius: 10px;
+  transition: 0.1s;
+}
+
+.historyItem:hover {
+  cursor: pointer;
+  background-color: rgba(168, 255, 209, 0.5);
+  transform: scale(0.95);
+}
+
+.historyItem div {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%); 
+  text-align: center;
+}

@@ -48,7 +48,10 @@ export default class Board extends React.Component {
       var newBlockStates = prevState.blockStates;
       newBlockStates[number] = isPlayerOnesTurn ? 'X' : 'O'
       return { blockStates: newBlockStates };
-    }, this.updateGameState);
+    }, () => {
+      this.updateGameState();
+      this.updateHistory(number);
+    });
   }
 
   blockIsMarked(number) {
@@ -64,6 +67,10 @@ export default class Board extends React.Component {
     } else {
       this.props.switchTurn();
     }
+  }
+
+  updateHistory(block) {
+    this.props.addToHistory(block);
   }
 
   resetBoard() {
@@ -110,7 +117,6 @@ export default class Board extends React.Component {
 
   isCatsGame() {
     for (var i = 1; i <= 9; i += 1) {
-      console.log(this.state.blockStates[i]);
       if (this.state.blockStates[i] == null) {
         return false;
       }
