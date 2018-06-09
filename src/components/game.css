@@ -11,3 +11,22 @@
   margin-bottom: 20px;
   margin-left: -5px;
 }
+
+div button {
+  margin-top: 20px;
+  margin-left: -5px;
+  font-family: monospace;
+  font-size: 1.5em;
+  background-color: #f2f0e3;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+div button:hover {
+  transform: scale(1.1);
+  background-color: #b4b2a4
+}
+
+div button:focus {
+  outline: 0;
+}

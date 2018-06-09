@@ -17,7 +17,8 @@ export default class Board extends React.Component {
        7: null, 8: null, 9: null
       };
     this.state = {
-      blockStates: defaultBlockState
+      blockStates: defaultBlockState,
+      canSelectBlock: true
     }
   }
 
@@ -38,7 +39,7 @@ export default class Board extends React.Component {
   }
 
   selectBlock(number) {
-    if (this.blockIsMarked(number)) {
+    if (this.blockIsMarked(number) || !this.state.canSelectBlock) {
       return;
     }
 
@@ -54,19 +55,22 @@ export default class Board extends React.Component {
     return this.state.blockStates[number];
   }
 
-
   updateGameState() {
     if (this.aPlayerDidWin()) {
-      const defaultBlockState = 
-        { 1: null, 2: null, 3: null, 
-          4: null, 5: null, 6: null, 
-          7: null, 8: null, 9: null
-        };
-      this.setState({ blockStates: defaultBlockState});
+      this.toggleBlockSelection();
       this.props.endGame();
     } else {
       this.props.switchTurn();
     }
+  }
+
+  resetBoard() {
+    const defaultBlockState = 
+      { 1: null, 2: null, 3: null, 
+        4: null, 5: null, 6: null, 
+        7: null, 8: null, 9: null
+      };
+    this.setState({ blockStates: defaultBlockState, canSelectBlock: true });
   }
 
   aPlayerDidWin() {
@@ -100,6 +104,10 @@ export default class Board extends React.Component {
       }
     }
     return true;
+  }
+
+  toggleBlockSelection() {
+    this.setState({canSelectBlock: false});
   }
 
   render() {
