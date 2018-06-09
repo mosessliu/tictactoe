@@ -24,7 +24,8 @@ div button {
 
 div button:hover {
   transform: scale(1.1);
-  background-color: #b4b2a4
+  background-color: #b4b2a4;
+  cursor: pointer;
 }
 
 div button:focus {

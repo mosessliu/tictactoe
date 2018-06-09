@@ -59,6 +59,8 @@ export default class Board extends React.Component {
     if (this.aPlayerDidWin()) {
       this.toggleBlockSelection();
       this.props.endGame();
+    } else if (this.isCatsGame()) {
+      this.props.catsGame();
     } else {
       this.props.switchTurn();
     }
@@ -100,6 +102,16 @@ export default class Board extends React.Component {
     for (var i = 0; i < condition.length; i += 1) {
       const key = condition[i];
       if (blockStates[key] !== marker) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  isCatsGame() {
+    for (var i = 1; i <= 9; i += 1) {
+      console.log(this.state.blockStates[i]);
+      if (this.state.blockStates[i] == null) {
         return false;
       }
     }

@@ -7,11 +7,13 @@ export default class Game extends React.Component {
     super(props);
     this.state = { 
       isPlayerOnesTurn: true, 
-      gameIsActive: true
+      gameIsActive: true,
+      isCatsGame: false
     }; 
     this.switchTurn = this.switchTurn.bind(this);
     this.endGame = this.endGame.bind(this);
     this.resetGame = this.resetGame.bind(this);
+    this.catsGame = this.catsGame.bind(this);
   }
 
   switchTurn() {
@@ -26,13 +28,26 @@ export default class Game extends React.Component {
 
   resetGame() {
     this._board.resetBoard();
-    this.setState({ gameIsActive: true});
+    this.setState({ gameIsActive: true, isCatsGame: false});
+  }
+
+  catsGame() {
+    this.setState({isCatsGame: true})
+  }
+
+  generateMessage() {
+    if (this.state.isCatsGame) {
+      return 'Cats Game!'
+    }
+
+    if (this.state.gameIsActive) {
+      return `It is player ${this.state.isPlayerOnesTurn ? 'one' : 'two'}'s turn!`;
+    } else {
+      return `Player ${this.state.isPlayerOnesTurn ? 'one' : 'two'} won!`;
+    }
   }
 
   render() {
-    const message = this.state.gameIsActive ? 
-      `It is player ${this.state.isPlayerOnesTurn ? 'one' : 'two'}'s turn!` :
-      `Player ${this.state.isPlayerOnesTurn ? 'one' : 'two'} won!`;
     const self = this;
     return (
       <div>
@@ -40,13 +55,14 @@ export default class Game extends React.Component {
           Tic Tac Toe!
         </div>
         <div className="description">
-          {message}
+          {this.generateMessage()}
         </div>
         <Board 
           ref = { (board) => self._board = board }
           isPlayerOnesTurn = {this.state.isPlayerOnesTurn}
           switchTurn = {this.switchTurn}
           endGame = {this.endGame}
+          catsGame = {this.catsGame}
         />
         <button onClick={this.resetGame}>Reset Game</button>
       </div>
