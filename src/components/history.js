@@ -10,7 +10,7 @@ export default class History extends React.Component {
       return (
         <li key={item} className="historyItem" onClick={() => revertToMove(moveNumber)}>
           <div>
-            Revert to move {index + 1}
+            Revert to move {moveNumber}
           </div>
         </li>
       );
