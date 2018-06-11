@@ -17,30 +17,34 @@ export default class Board extends React.Component {
     this.selectBlock = this.selectBlock.bind(this);
 
     this.state = {
-      blockStates: this.getDefaultBlockState(),
+      blocksData: this.initBlocksData(),
       canSelectBlock: true
     }
   }
 
-  getDefaultBlockState() {
-    const states = {};
+  initBlocksData() {
+    const blocks = {}
     const dimension = this._DIMENSION;
-    for (var i = 1; i <= dimension; i += 1) {
-      states[i] = null;
+    const numberOfBlocks = dimension * dimension;
+    for (var i = 1; i <= numberOfBlocks; i += 1) {
+      const block = {
+        id: i,
+        color: this.getRandomColor(),
+        ownedBy: null
+      }
+      blocks[i] = block;
     }
-    return states;
+    return blocks;
   }
 
   createBlockRow(nums) {
     return nums.map(i => {
-      const color = this.getRandomColor();
+      const block = this.state.blocksData[i];
       return (
         <li key={i}>
           <Block 
-            number={i} 
-            color={color}
+            block={block}
             selectBlock={this.selectBlock}
-            marking={this.state.blockStates[i]}
           />
         </li>
       );
@@ -52,23 +56,19 @@ export default class Board extends React.Component {
     return this._colorArray[randomIndex];
   }
 
-  selectBlock(number) {
-    if (this.blockIsMarked(number) || !this.state.canSelectBlock) {
+  selectBlock(block) {
+    if (block.ownedBy || !this.state.canSelectBlock) {
       return;
     }
-
+    const id = block.id;
     const isPlayerOnesTurn = this.props.isPlayerOnesTurn;
     this.setState((prevState) => {
-      var newBlockStates = prevState.blockStates;
-      newBlockStates[number] = isPlayerOnesTurn ? 'X' : 'O';
+      const marker = isPlayerOnesTurn ? 'X' : 'O';
+      prevState.blocksData[id].ownedBy = marker;
     }, () => {
       this.updateGameState();
-      this.updateHistory(number);
+      this.updateHistory(id);
     });
-  }
-
-  blockIsMarked(number) {
-    return this.state.blockStates[number];
   }
 
   updateGameState() {
@@ -82,17 +82,8 @@ export default class Board extends React.Component {
     }
   }
 
-  updateHistory(block) {
-    this.props.addToHistory(block);
-  }
-
-  resetBoard() {
-    const defaultBlockState = 
-      { 1: null, 2: null, 3: null, 
-        4: null, 5: null, 6: null, 
-        7: null, 8: null, 9: null
-      };
-    this.setState({ blockStates: defaultBlockState, canSelectBlock: true });
+  updateHistory(block_id) {
+    this.props.addToHistory(block_id);
   }
 
   aPlayerDidWin() {
@@ -104,7 +95,6 @@ export default class Board extends React.Component {
 
   checkRowsAndColumns(marker) {
     const dimension = this._DIMENSION;
-
     const numberOfBlocks = dimension * dimension;
 
     for (var i = 1; i <= numberOfBlocks; i += dimension) {
@@ -124,9 +114,9 @@ export default class Board extends React.Component {
   }
 
   wonFromRow(start, end, marker) {
-    const blockStates = this.state.blockStates;
+    const blocksData = this.state.blocksData;
     for (var j = start; j <= end; j += 1) {
-      if (blockStates[j] !== marker) {
+      if (blocksData[j].ownedBy !== marker) {
         return false;
       } 
     }
@@ -134,10 +124,10 @@ export default class Board extends React.Component {
   }
 
   wonFromColumn(start, end, marker) {
-    const blockStates = this.state.blockStates;
+    const blocksData = this.state.blocksData;
     const dimension = this._DIMENSION;
     for (var j = start; j <= end; j += dimension) {
-      if (blockStates[j] !== marker) {
+      if (blocksData[j].ownedBy !== marker) {
         return false;
       }
     }
@@ -151,10 +141,10 @@ export default class Board extends React.Component {
   wonFromLeftTopToBottomRight(marker) {
     const dimension = this._DIMENSION;
     const numberOfBlocks = dimension * dimension;
-    const blockStates = this.state.blockStates;
+    const blocksData = this.state.blocksData;
 
     for (var i = 1; i <= numberOfBlocks; i += (dimension + 1)) {
-      if (blockStates[i] !== marker) {
+      if (blocksData[i].ownedBy !== marker) {
         return false;
       }      
     }
@@ -164,10 +154,10 @@ export default class Board extends React.Component {
   wonFromRightTopToBottomLeft(marker) {
     const dimension = this._DIMENSION;
     const numberOfBlocks = dimension * dimension;
-    const blockStates = this.state.blockStates;
+    const blocksData = this.state.blocksData;
 
     for (var i = dimension; i <= numberOfBlocks; i += (dimension - 1)) {
-      if (blockStates[i] !== marker) {
+      if (blocksData[i].ownedBy !== marker) {
         return false;
       }      
     }
@@ -178,7 +168,7 @@ export default class Board extends React.Component {
     const dimension = this._DIMENSION;
     const numberOfBlocks = dimension * dimension;
     for (var i = 1; i <= numberOfBlocks; i += 1) {
-      if (this.state.blockStates[i] == null) {
+      if (this.state.blocksData[i].ownedBy == null) {
         return false;
       }
     }

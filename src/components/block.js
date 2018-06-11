@@ -4,22 +4,21 @@ import './block.css';
 export default class Block extends React.Component {
   constructor(props) {
     super(props);
-    this.setState = {owner: " "};
+    this._BLOCK = this.props.block;
     this.selectBlock = this.selectBlock.bind(this);
   }
 
   selectBlock() {
-    const number = this.props.number;
-    this.props.selectBlock(number);
+    this.props.selectBlock(this._BLOCK);
   }
 
 
   render() {
-    const marking = this.props.marking ? this.props.marking : "_";
+    const marking = this._BLOCK.ownedBy ? this._BLOCK.ownedBy : "_";
     // hide unmarked blocks by setting color = backgroundcolor of block
-    const color = this.props.marking ? "black" : this.props.color;
+    const color = this._BLOCK.ownedBy ? "black" : this._BLOCK.color;
     const style = {
-      backgroundColor: this.props.color,
+      backgroundColor: this._BLOCK.color,
       color: color
     }
     return (

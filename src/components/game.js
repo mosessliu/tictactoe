@@ -44,14 +44,17 @@ export default class Game extends React.Component {
 
   revertToMove(moveNumber) {
     var history = this.state.history;
-    var blockStates = this._board.state.blockStates;
+    var blocksData = this._board.state.blocksData;
 
     while (history.length > moveNumber) {
-      const poppedBlock = history.pop();
-      blockStates[poppedBlock] = null;
+      const popped_id = history.pop();
+      blocksData[popped_id].ownedBy = null;
     }
-    this.setState({ history: history, isPlayerOnesTurn: (moveNumber % 2 === 0) });
-    this._board.setState({ blockStates: blockStates});
+    this.setState({ 
+      history: history, 
+      isPlayerOnesTurn: (moveNumber % 2 === 0),
+      gameIsActive: true });
+    this._board.setState({ blocksData: blocksData});
   }
 
   endGame() {
@@ -59,7 +62,6 @@ export default class Game extends React.Component {
   }
 
   resetGame() {
-    this._board.resetBoard();
     this.setState({ 
       hasEnteredBoardSize: false,
       isPlayerOnesTurn: true,
@@ -83,7 +85,6 @@ export default class Game extends React.Component {
       return `Player ${this.state.isPlayerOnesTurn ? 'one' : 'two'} won!`;
     }
   }
-
 
   render() {
     const self = this;
