@@ -1,23 +1,31 @@
 import React from 'react';
 import Board from './board';
 import History from './history';
+import BoardSetting from './setting';
 import './game.css';
 
 export default class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = { 
+      hasEnteredBoardSize: false,
+      boardSize: 0,
       isPlayerOnesTurn: true, 
       gameIsActive: true,
       isCatsGame: false,
       history: []
     }; 
+    this.enterBoardSize = this.enterBoardSize.bind(this);
     this.switchTurn = this.switchTurn.bind(this);
     this.endGame = this.endGame.bind(this);
     this.resetGame = this.resetGame.bind(this);
     this.catsGame = this.catsGame.bind(this);
     this.addToHistory = this.addToHistory.bind(this);
     this.revertToMove = this.revertToMove.bind(this);
+  }
+
+  enterBoardSize(size) {
+    this.setState( {hasEnteredBoardSize: true, boardSize: size} );
   }
 
   switchTurn() {
@@ -42,7 +50,7 @@ export default class Game extends React.Component {
       const poppedBlock = history.pop();
       blockStates[poppedBlock] = null;
     }
-    this.setState({ history: history, isPlayerOnesTurn: (moveNumber % 2 == 0) });
+    this.setState({ history: history, isPlayerOnesTurn: (moveNumber % 2 === 0) });
     this._board.setState({ blockStates: blockStates});
   }
 
@@ -53,6 +61,7 @@ export default class Game extends React.Component {
   resetGame() {
     this._board.resetBoard();
     this.setState({ 
+      hasEnteredBoardSize: false,
       isPlayerOnesTurn: true,
       gameIsActive: true, 
       isCatsGame: false, 
@@ -78,28 +87,47 @@ export default class Game extends React.Component {
 
   render() {
     const self = this;
-    return (
-      <div>
-        <div className="title">
-          Tic Tac Toe!
+
+    if (this.state.hasEnteredBoardSize) {
+      return (
+        <div>
+          <div className="title">
+            Tic Tac Toe!
+          </div>
+          <div className="message">
+            {this.generateMessage()}
+          </div>
+          <Board 
+            ref={(board) => self._board = board}
+            boardSize={this.state.boardSize}
+            isPlayerOnesTurn={this.state.isPlayerOnesTurn}
+            switchTurn={this.switchTurn}
+            endGame={this.endGame}
+            catsGame={this.catsGame}
+            addToHistory={this.addToHistory}
+          />
+          <button onClick={this.resetGame}>Reset Game</button>
+          <History 
+            history={this.state.history}
+            revertToMove={this.revertToMove}
+          />
         </div>
-        <div className="message">
-          {this.generateMessage()}
+      );
+    } else {
+      return (
+        <div>
+           <div className="title">
+            Tic Tac Toe!
+          </div>
+          <div className="message-before-start">
+            Enter a board size:
+          </div>
+          <BoardSetting 
+            hasEnteredBoardSize={this.state.hasEnteredBoardSize}
+            enterBoardSize={this.enterBoardSize}
+          /> 
         </div>
-        <Board 
-          ref = { (board) => self._board = board }
-          isPlayerOnesTurn = {this.state.isPlayerOnesTurn}
-          switchTurn = {this.switchTurn}
-          endGame = {this.endGame}
-          catsGame = {this.catsGame}
-          addToHistory = {this.addToHistory}
-        />
-        <button onClick={this.resetGame}>Reset Game</button>
-        <History 
-          history={this.state.history}
-          revertToMove={this.revertToMove}
-        />
-      </div>
-    );
+      );
+    }    
   }
 }

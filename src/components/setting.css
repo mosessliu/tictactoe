@@ -1,0 +1,32 @@
+div input {
+  font-size: 1.5em;
+  width: 35px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: -5px;
+  font-family: monospace;
+  background-color: rgba(255,255,255, 0.5);
+  margin-top: 20px;
+  margin-right: 10px;
+  border-radius: 10px;
+  border-width: 0;
+  transition: 0.1s;
+
+}
+
+div input:focus {
+  outline-style: none;
+  transform: scale(0.90);
+  background-color:  rgba(255,255,255, 0.75);
+}
+
+div span {
+  font-size: 1.5em;
+  font-family: tahoma;
+}
+
+.otherDimensionInput {
+  margin-left: 10px;
+}

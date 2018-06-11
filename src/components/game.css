@@ -12,6 +12,12 @@
   margin-left: -5px;
 }
 
+.message-before-start {
+  font-size: 2.0em;
+  font-family: monospace;
+  margin-left: -5px;
+}
+
 div button {
   margin-top: 20px;
   margin-left: -5px;
@@ -32,4 +38,9 @@ div button:hover {
 
 div button:focus {
   outline: 0;
+}
+
+.align-right {
+  margin-right: 0;
+  float: right;
 }
